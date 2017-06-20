@@ -2,16 +2,27 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/Lacrymology/cams"
 )
+
+func basename (filename string) string {
+	ext := filepath.Ext(filename)
+	return filename[0:len(filename) - len(ext)]
+}
 
 func main() {
 	args := os.Args[1:]
 
 	inputCsv := args[0]
-	outputStlL := "out-l.stl"
-	outputStlR := "out-r.stl"
+
+	base := basename(filepath.Base(inputCsv))
+
+	outputStlL := filepath.Join("out", base, base + "-L.stl")
+	outputStlR := filepath.Join("out", base, base + "-R.stl")
+
+	os.MkdirAll(filepath.Join("out", base), 0755)
 
 	cams.CreateCams(
 		5,
